@@ -33,7 +33,7 @@ def register():
         # Save info into database
         db.session.commit()
 
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
         # Flask Email Sender 
         
     return render_template('register.html',form = form)
@@ -42,10 +42,10 @@ def register():
 @app.route('/posts', methods=['GET','POST'])
 @login_required
 def posts():
-    post = PostForm()
-    if request.method == 'POST' and post.validate():
-        title = post.title.data
-        content = post.content.data
+    form = PostForm()
+    if request.method == 'POST' and form.validate():
+        title = form.title.data
+        content = form.content.data
         user_id = current_user.id
         # print('\n',title,content)
         post = Post(title,content,user_id)
@@ -54,7 +54,7 @@ def posts():
 
         db.session.commit()
         return redirect(url_for('home'))
-    return render_template('posts.html', post = post)
+    return render_template('posts.html', form = form)
 
 @app.route('/posts/<int:post_id>')
 @login_required
